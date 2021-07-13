@@ -25,7 +25,7 @@ class fatFuckSQL:
         async with self._pool.acquire() as con:
             async with con.transaction():
                 if args: # stupid asyncpg
-                    return await con.fetch(query, args)
+                    return await con.fetch(query, *args)
                 else:
                     return await con.fetch(query)
 
@@ -33,7 +33,7 @@ class fatFuckSQL:
         async with self._pool.acquire() as con:
             async with con.transaction():
                 if args: # stupid asyncpg
-                    return await con.fetchval(query, args)
+                    return await con.fetchval(query, *args)
                 else:
                     return await con.fetchval(query)
 
@@ -41,7 +41,7 @@ class fatFuckSQL:
         async with self._pool.acquire() as con:
             async with con.transaction():
                 if args: # stupid asyncpg
-                    return await con.fetchrow(query, args)
+                    return await con.fetchrow(query, *args)
                 else:
                     return await con.fetchrow(query)
 
@@ -49,7 +49,7 @@ class fatFuckSQL:
         async with self._pool.acquire() as con:
             async with con.transaction():
                 if args: # stupid asyncpg
-                    return await con.execute(query, args)
+                    return await con.execute(query, *args)
                 else:
                     return await con.execute(query)
             
@@ -57,7 +57,7 @@ class fatFuckSQL:
         async with self._pool.acquire() as con:
             async with con.transaction():
                 if args: # stupid asyncpg
-                    rows = await con.fetch(query, args)
+                    rows = await con.fetch(query, *args)
                 else:
                     rows = await con.fetch(query)
                 
