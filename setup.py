@@ -5,7 +5,7 @@ with open('README.md', 'r') as rm:
 
 setuptools.setup(
     name='fatFuckSQL',
-    version='0.0.2',
+    version='0.0.3',
     author='tsunyoku',
     author_email='tsunyoku@gmail.com',
     description='Light wrapper for asyncpg',
@@ -13,6 +13,7 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url='https://github.com/tsunyoku/fatFuckSQL',
     packages=setuptools.find_packages(),
+    install_requires=['asyncpg']
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
