@@ -23,31 +23,46 @@ class fatFuckSQL:
     
     async def fetch(self, query: str, *args):
         async with self._pool.acquire() as con:
-            if args: # stupid asyncpg
-                return await con.fetch(query, args)
-            else:
-                return await con.fetch(query)
+            async with con.transaction():
+                if args: # stupid asyncpg
+                    return await con.fetch(query, args)
+                else:
+                    return await con.fetch(query)
 
     async def fetchval(self, query: str, *args):
         async with self._pool.acquire() as con:
-            if args: # stupid asyncpg
-                return await con.fetchval(query, args)
-            else:
-                return await con.fetchval(query)
+            async with con.transaction():
+                if args: # stupid asyncpg
+                    return await con.fetchval(query, args)
+                else:
+                    return await con.fetchval(query)
 
     async def fetchrow(self, query: str, *args):
         async with self._pool.acquire() as con:
-            if args: # stupid asyncpg
-                return await con.fetchrow(query, args)
-            else:
-                return await con.fetchrow(query)
+            async with con.transaction():
+                if args: # stupid asyncpg
+                    return await con.fetchrow(query, args)
+                else:
+                    return await con.fetchrow(query)
 
     async def execute(self, query: str, *args):
         async with self._pool.acquire() as con:
-            if args: # stupid asyncpg
-                return await con.execute(query, args)
-            else:
-                return await con.execute(query)
+            async with con.transaction():
+                if args: # stupid asyncpg
+                    return await con.execute(query, args)
+                else:
+                    return await con.execute(query)
+            
+    async def iter(self, query: str, *args): # fetch() but iteration
+        async with self._pool.acquire() as con:
+            async with con.transaction():
+                if args: # stupid asyncpg
+                    rows = await con.fetch(query, args)
+                else:
+                    rows = await con.fetch(query)
+                
+                async for row in rows:
+                    yield row
 
     async def close(self):
         await self._pool.close()
