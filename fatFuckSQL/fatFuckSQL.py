@@ -61,7 +61,7 @@ class fatFuckSQL:
                 else:
                     rows = await con.fetch(query)
                 
-                async for row in rows:
+                for row in rows:
                     yield row
 
     async def close(self):

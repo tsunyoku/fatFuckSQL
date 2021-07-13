@@ -5,7 +5,7 @@ with open('README.md', 'r') as rm:
 
 setuptools.setup(
     name='fatFuckSQL',
-    version='0.0.5',
+    version='0.0.6',
     author='tsunyoku',
     author_email='tsunyoku@gmail.com',
     description='Light wrapper for asyncpg',
