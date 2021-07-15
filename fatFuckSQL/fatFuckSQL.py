@@ -99,7 +99,7 @@ class fatFawkSQL: # mysql/mariadb
         async with self._pool.acquire() as con:
             async with con.cursor(aiomysql.Cursor) as cur:
                 await cur.execute(query, params)
-                await conn.commit()
+                await con.commit()
                 
                 return cur.lastrowid
             
