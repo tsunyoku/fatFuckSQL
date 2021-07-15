@@ -110,3 +110,7 @@ class fatFawkSQL: # mysql/mariadb
                 
                 async for row in cur:
                     yield row
+                    
+    async def close(self):
+        self._pool.close()
+        await self._pool.wait_closed()
