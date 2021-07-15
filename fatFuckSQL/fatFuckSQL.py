@@ -62,7 +62,8 @@ class fatFuckSQL: #postgresql
 class fatFawkSQL: # mysql/mariadb
     def __init__(self):
         self._pool = None
-        
+    
+    @classmethod
     async def connect(self, db: str, host: str, password: str, user: str):
         self = self()
         
