@@ -84,9 +84,9 @@ class fatFawkSQL: # mysql/mariadb
             
     async def fetchval(self, query: str, params: list = []):
         async with self._pool.acquire() as con:
-        async with con.cursor(aiomysql.DictCursor) as cur:
-            await cur.execute(query, params)
-            return list((await cur.fetchone()).values())[0] # return first value
+            async with con.cursor(aiomysql.DictCursor) as cur:
+                await cur.execute(query, params)
+                return list((await cur.fetchone()).values())[0] # return first value
         
     async def fetchrow(self, query: str, params: list = []):
         async with self._pool.acquire() as con:
