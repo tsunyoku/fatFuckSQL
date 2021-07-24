@@ -1,6 +1,8 @@
 import aiomysql
 import asyncpg # troll
 
+from typing import Optional, Sequence, Any, AsyncGenerator
+
 class fatFuckSQL: #postgresql
     def __init__(self): # blank init vars
         self._pool = None
@@ -58,14 +60,14 @@ class fatFuckSQL: #postgresql
 
     async def close(self):
         await self._pool.close()
-        
+
 class fatFawkSQL: # mysql/mariadb
     def __init__(self):
-        self._pool = None
+        self._pool: Optional[aiomysql.Pool] = None
     
     @classmethod
-    async def connect(self, db: str, host: str, password: str, user: str):
-        self = self()
+    async def connect(cls, db: str, host: str, password: str, user: str) -> 'fatFawkSQL':
+        self = cls()
         
         self._pool = await aiomysql.create_pool(
             user=user,
@@ -77,13 +79,13 @@ class fatFawkSQL: # mysql/mariadb
         
         return self
         
-    async def fetch(self, query: str, params: list = []):
+    async def fetch(self, query: str, params: Sequence[Any] = []) -> tuple[Optional[dict[str, Any]], ...]:
         async with self._pool.acquire() as con:
             async with con.cursor(aiomysql.DictCursor) as cur:
                 await cur.execute(query, params)
                 return await cur.fetchall()
             
-    async def fetchval(self, query: str, params: list = []):
+    async def fetchval(self, query: str, params: Sequence[Any] = []) -> Optional[Any]:
         async with self._pool.acquire() as con:
             async with con.cursor(aiomysql.DictCursor) as cur:
                 await cur.execute(query, params)
@@ -94,13 +96,13 @@ class fatFawkSQL: # mysql/mariadb
                 
                 return None
         
-    async def fetchrow(self, query: str, params: list = []):
+    async def fetchrow(self, query: str, params: Sequence[Any] = []) -> Optional[dict[str, Any]]:
         async with self._pool.acquire() as con:
             async with con.cursor(aiomysql.DictCursor) as cur:
                 await cur.execute(query, params)
                 return await cur.fetchone()
             
-    async def execute(self, query: str, params: list = []):
+    async def execute(self, query: str, params: Sequence[Any] = []):
         async with self._pool.acquire() as con:
             async with con.cursor(aiomysql.Cursor) as cur:
                 await cur.execute(query, params)
@@ -108,7 +110,7 @@ class fatFawkSQL: # mysql/mariadb
                 
                 return cur.lastrowid
             
-    async def iter(self, query: str, params: list = []):
+    async def iter(self, query: str, params: Sequence[Any] = []) -> AsyncGenerator[Optional[dict[str, Any]], None]:
         async with self._pool.acquire() as con:
             async with con.cursor(aiomysql.DictCursor) as cur:
                 await cur.execute(query, params)
@@ -116,6 +118,6 @@ class fatFawkSQL: # mysql/mariadb
                 async for row in cur:
                     yield row
                     
-    async def close(self):
+    async def close(self) -> None:
         self._pool.close()
         await self._pool.wait_closed()
